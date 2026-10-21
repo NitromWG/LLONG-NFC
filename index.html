@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Certificat d'Authenticité — Caroline Llong</title>
+  <title>Authentification Châssis — Caroline Llong</title>
   <style>
     :root {
       --accent: #e60000;
-      --accent-glow: rgba(230, 0, 0, 0.25);
       --bg: #080808;
       --card: #121212;
       --border: #262626;
       --text: #f5f5f5;
       --muted: #888888;
       --success: #00e676;
+      --danger: #ff1744;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body {
       background-color: var(--bg);
       background-image: radial-gradient(circle at 50% 0%, #1f0808 0%, transparent 60%);
@@ -25,117 +25,66 @@
       margin: 0 auto;
       min-height: 100vh;
     }
-
-    /* En-tête & Badge dynamique */
     .header { text-align: center; margin-bottom: 24px; }
     .brand { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
     .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border);
-      padding: 6px 14px;
-      border-radius: 30px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      transition: all 0.4s ease;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border);
+      padding: 6px 14px; border-radius: 30px; font-size: 11px; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase;
     }
-    .status-badge.verified {
-      background: rgba(0, 230, 118, 0.1);
-      border-color: rgba(0, 230, 118, 0.4);
-      color: var(--success);
-    }
-    .dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--accent);
-      animation: pulse 1s infinite alternate;
-    }
-    .verified .dot { background: var(--success); animation: none; box-shadow: 0 0 8px var(--success); }
+    .status-badge.verified { background: rgba(0, 230, 118, 0.1); border-color: rgba(0, 230, 118, 0.4); color: var(--success); }
+    .status-badge.error { background: rgba(255, 23, 68, 0.12); border-color: var(--danger); color: var(--danger); }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+    .verified .dot { background: var(--success); box-shadow: 0 0 8px var(--success); }
+    .error .dot { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
 
-    @keyframes pulse { from { opacity: 0.3; } to { opacity: 1; } }
-
-    /* Titre de l'œuvre */
     .artwork-header { margin-bottom: 20px; text-align: center; }
     h1 { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2; margin-bottom: 6px; }
     .artist-sub { font-size: 13px; color: var(--muted); }
 
-    /* Plaque Châssis Télémétrie */
     .chassis-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 18px;
-      margin-bottom: 22px;
-      position: relative;
-      overflow: hidden;
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 18px; margin-bottom: 22px; position: relative; overflow: hidden;
     }
-    .chassis-card::before {
-      content: "";
-      position: absolute; top: 0; left: 0; width: 4px; height: 100%;
-      background: var(--accent);
-    }
-    .card-title {
-      font-size: 10px; text-transform: uppercase; letter-spacing: 2px;
-      color: var(--muted); margin-bottom: 12px; display: flex; justify-content: space-between;
-    }
-    .row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 0; border-bottom: 1px solid #1c1c1c; font-size: 13px;
-    }
+    .chassis-card::before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent); }
+    .card-title { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 12px; display: flex; justify-content: space-between; }
+    .row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #1c1c1c; font-size: 13px; }
     .row:last-child { border-bottom: none; padding-bottom: 0; }
     .label { color: var(--muted); font-size: 12px; }
-    .val { font-weight: 600; font-family: "SF Mono", "Roboto Mono", monospace; font-size: 13px; color: #fff; text-align: right; }
+    .val { font-weight: 600; font-family: monospace; font-size: 13px; color: #fff; text-align: right; }
 
-    /* Histoire / Note de l'artiste */
     .story-box {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid #1f1f1f;
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-bottom: 24px;
-      font-size: 13px;
-      line-height: 1.5;
-      color: #bbb;
-      font-style: italic;
+      background: rgba(255,255,255,0.02); border: 1px solid #1f1f1f; border-radius: 10px;
+      padding: 14px 16px; margin-bottom: 24px; font-size: 13px; line-height: 1.5; color: #bbb; font-style: italic;
     }
-
-    /* Bloc Conversion VIP */
     .vip-box {
-      background: linear-gradient(160deg, #1a1a1a 0%, #0f0f0f 100%);
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      background: linear-gradient(160deg, #1a1a1a 0%, #0f0f0f 100%); border: 1px solid #333;
+      border-radius: 12px; padding: 20px; text-align: center;
     }
-    .vip-tag {
-      display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
-      text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
-    }
-    .vip-box h2 { font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .vip-tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+    .vip-box h2 { font-size: 16px; text-transform: uppercase; margin-bottom: 8px; }
     .vip-box p { font-size: 13px; color: #aaa; line-height: 1.45; margin-bottom: 18px; }
 
     .btn {
-      display: block; width: 100%; padding: 14px 16px; border-radius: 8px;
-      font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;
-      text-decoration: none; transition: transform 0.15s ease, opacity 0.15s ease;
+      display: block; width: 100%; padding: 14px 16px; border-radius: 8px; border: none; cursor: pointer;
+      font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; text-decoration: none;
     }
-    .btn:active { transform: scale(0.98); }
-    .btn-primary {
-      background: var(--accent); color: #fff;
-      box-shadow: 0 4px 15px var(--accent-glow);
-      margin-bottom: 10px;
+    .btn-primary { background: var(--accent); color: #fff; margin-bottom: 10px; }
+    .btn-secondary { background: transparent; color: #ddd; border: 1px solid #383838; }
+
+    /* Panneau Générateur Admin */
+    .hidden { display: none !important; }
+    .admin-box input, .admin-box textarea {
+      width: 100%; background: #161616; border: 1px solid #333; color: #fff;
+      padding: 10px; border-radius: 6px; margin-bottom: 12px; font-size: 13px;
     }
-    .btn-secondary {
-      background: transparent; color: #ddd; border: 1px solid #383838;
+    .admin-box label { font-size: 11px; color: var(--muted); text-transform: uppercase; display: block; margin-bottom: 4px; }
+    .code-out {
+      background: #000; border: 1px solid #333; padding: 12px; border-radius: 6px;
+      font-family: monospace; font-size: 11px; word-break: break-all; color: var(--success); margin-top: 12px;
     }
-    .footer {
-      text-align: center; margin-top: 28px; font-size: 11px; color: #555;
-      letter-spacing: 0.5px;
-    }
+    .footer { text-align: center; margin-top: 28px; font-size: 11px; color: #555; }
   </style>
 </head>
 <body>
@@ -144,112 +93,198 @@
     <div class="brand">Caroline Llong // Artworks</div>
     <div id="badge" class="status-badge">
       <span class="dot"></span>
-      <span id="status-text">Lecture de la puce châssis...</span>
+      <span id="status-text">Vérification AES-GCM...</span>
     </div>
   </div>
 
-  <div class="artwork-header">
-    <h1 id="art-title">Chargement...</h1>
-    <div class="artist-sub">Artiste Officielle des 24 Heures du Mans</div>
-  </div>
-
-  <div class="chassis-card">
-    <div class="card-title">
-      <span>Identification Châssis</span>
-      <span>NFC-TAG V1</span>
+  <!-- VUE CLIENT : CERTIFICAT DÉCHIFFRÉ -->
+  <div id="client-view" class="hidden">
+    <div class="artwork-header">
+      <h1 id="art-title"></h1>
+      <div class="artist-sub">Artiste Officielle des 24 Heures du Mans</div>
     </div>
-    <div class="row"><span class="label">N° de Châssis</span><span class="val" id="art-id">--</span></div>
-    <div class="row"><span class="label">Collection</span><span class="val" id="art-col">--</span></div>
-    <div class="row"><span class="label">Technique</span><span class="val" id="art-tech">--</span></div>
-    <div class="row"><span class="label">Édition</span><span class="val" id="art-ed">--</span></div>
-    <div class="row"><span class="label">Année</span><span class="val" id="art-year">--</span></div>
+
+    <div class="chassis-card">
+      <div class="card-title">
+        <span>Identification Châssis</span>
+        <span>AES-128-GCM</span>
+      </div>
+      <div class="row"><span class="label">N° de Châssis</span><span class="val" id="art-id"></span></div>
+      <div class="row"><span class="label">Collection</span><span class="val" id="art-col"></span></div>
+      <div class="row"><span class="label">Technique</span><span class="val" id="art-tech"></span></div>
+      <div class="row"><span class="label">Édition</span><span class="val" id="art-ed"></span></div>
+      <div class="row"><span class="label">Empreinte Clé</span><span class="val" id="art-hash"></span></div>
+    </div>
+
+    <div class="story-box" id="art-story"></div>
+
+    <div class="vip-box">
+      <span class="vip-tag">Département Sur-Mesure</span>
+      <h2>Immortalisez votre automobile</h2>
+      <p>Vous possédez une voiture de sport, de course ou de collection ? Faites réaliser une œuvre unique et certifiée de votre propre modèle par Caroline Llong.</p>
+      <a id="cta-btn" href="#" class="btn btn-primary">Demander une création privée</a>
+      <a href="https://www.carolinellong.com" target="_blank" rel="noopener" class="btn btn-secondary">Explorer la galerie officielle</a>
+    </div>
   </div>
 
-  <div class="story-box" id="art-story"></div>
-
-  <div class="vip-box">
-    <span class="vip-tag">Département Sur-Mesure</span>
-    <h2>Immortalisez votre automobile</h2>
-    <p>Vous possédez une voiture de sport, de course ou de collection ? Faites réaliser une œuvre unique et certifiée de votre propre modèle par Caroline Llong.</p>
-    <a id="cta-btn" href="#" class="btn btn-primary">Demander une création privée</a>
-    <a href="https://www.carolinellong.com" target="_blank" rel="noopener" class="btn btn-secondary">Explorer la galerie officielle</a>
+  <!-- VUE ERREUR : ANTI BRUTE-FORCE -->
+  <div id="error-view" class="hidden">
+    <div class="chassis-card" style="border-color: var(--danger);">
+      <h1 style="font-size: 18px; color: var(--danger); margin-bottom: 10px;">Accès Refusé</h1>
+      <p style="font-size: 13px; color: #ccc; line-height: 1.5;">
+        La signature cryptographique est absente ou invalide. Ce certificat ne peut être déverrouillé qu'en scannant physiquement la plaque châssis NFC intégrée à l'œuvre originale.
+      </p>
+    </div>
   </div>
 
-  <div class="footer">
-    Système d'authentification mécatronique NFC
+  <!-- VUE INGÉNIEUR : GÉNÉRATEUR DE PUCE CHIFFRÉE (#admin) -->
+  <div id="admin-view" class="hidden admin-box">
+    <h1 style="font-size: 18px; margin-bottom: 16px;">Générateur de Puce Chiffrée</h1>
+    <label>ID Châssis (ex: CL-001)</label>
+    <input id="in-id" value="CL-001">
+    <label>Titre de l'œuvre</label>
+    <input id="in-title" value="Légende Nocturne — 24H du Mans">
+    <label>Collection</label>
+    <input id="in-col" value="Endurance & Le Mans">
+    <label>Technique</label>
+    <input id="in-tech" value="Mixte (Numérique & Acrylique)">
+    <label>Édition</label>
+    <input id="in-ed" value="Pièce Unique (1/1) — 2026">
+    <label>Citation / Histoire</label>
+    <textarea id="in-story" rows="3">« Capturer l'instant où les phares percent le brouillard des Hunaudières à 3h du matin. » — Caroline Llong</textarea>
+    <button id="gen-btn" class="btn btn-primary">Chiffrer en AES-128-GCM</button>
+
+    <div id="admin-output" class="hidden">
+      <label style="margin-top:16px;">1. Ligne à coller dans ENCRYPTED_DB (index.html) :</label>
+      <div id="out-db" class="code-out"></div>
+      <label style="margin-top:16px;">2. URL secrète à écrire dans la puce NFC :</label>
+      <div id="out-url" class="code-out"></div>
+    </div>
   </div>
+
+  <div class="footer">Système d'authentification cryptographique NFC</div>
 
   <script>
     // =========================================================================
-    // BASE DE DONNÉES DES ŒUVRES (Ajoute les futures toiles ici)
+    // BASE DE DONNÉES CHIFFRÉE (Illisible même en faisant Ctrl+U sur GitHub)
     // =========================================================================
-    const ARTWORKS = {
-      "CL-001": {
-        title: "Légende Nocturne — 24H du Mans",
-        collection: "Endurance & Le Mans",
-        tech: "Mixte (Création numérique & Acrylique)",
-        edition: "Pièce Unique (1/1)",
-        year: "2026",
-        story: "« Capturer l'instant où les phares percent le brouillard de la ligne droite des Hunaudières à 3h du matin. » — Caroline Llong"
-      },
-      "CL-002": {
-        title: "911 GT3 RS — Apex",
-        collection: "Porsche Heritage",
-        tech: "Acrylique & Encre sur toile",
-        edition: "Pièce Unique (1/1)",
-        year: "2026",
-        story: "« Une étude de vitesse et d'appui aérodynamique dédiée à la plus radicale des 911 atmosphériques. » — Caroline Llong"
-      },
-      "CL-003": {
-        title: "Rétromobile — Héritage Mécanique",
-        collection: "Édition Spéciale",
-        tech: "Tirage d'Art Numéroté & Rehaussé",
-        edition: "Série Limitée (01/15)",
-        year: "2026",
-        story: "« Exemplaire certifié par plaque châssis NFC et signé à la main par l'artiste à Aix-en-Provence. » — Caroline Llong"
-      }
+    const ENCRYPTED_DB = {
+      // Colle ici les lignes générées via ton mode #admin
     };
 
-    // Email ou WhatsApp de contact (remplace par son numéro ou son mail pro)
     const CONTACT_EMAIL = "contact@carolinellong.com";
-    // Si tu as son numéro portable pro (format 33612345678), mets-le ici pour ouvrir WhatsApp directement :
-    const WHATSAPP_NUMBER = ""; 
 
-    // Lecture de l'ID dans l'URL (?id=CL-001)
-    const params = new URLSearchParams(window.location.search);
-    const rawId = (params.get("id") || "CL-001").toUpperCase();
-    const art = ARTWORKS[rawId] || ARTWORKS["CL-001"];
-    const displayId = ARTWORKS[rawId] ? rawId : "CL-001 (DÉMO)";
+    // Utilitaires Hex <-> Uint8Array
+    const toHex = buf => Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+    const fromHex = hex => new Uint8Array(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));
 
-    // Injection des données dans la page
-    document.getElementById("art-title").textContent = art.title;
-    document.getElementById("art-id").textContent = displayId;
-    document.getElementById("art-col").textContent = art.collection;
-    document.getElementById("art-tech").textContent = art.tech;
-    document.getElementById("art-ed").textContent = art.edition;
-    document.getElementById("art-year").textContent = art.year;
-    document.getElementById("art-story").textContent = art.story;
+    async function init() {
+      const hash = window.location.hash.substring(1);
 
-    // Génération du lien de conversion traçable (prouve que le client vient de ta puce)
-    const msgSubject = encodeURIComponent(`Commande sur-mesure (via œuvre ${displayId})`);
-    const msgBody = encodeURIComponent(
-      `Bonjour Caroline,\n\nJ'ai scanné la plaque châssis NFC de votre œuvre "${art.title}" (Réf: ${displayId}).\n\nJe souhaiterais échanger avec vous pour la réalisation d'une œuvre sur-mesure.\n\nCordialement,`
-    );
+      // Mode Générateur pour toi : https://ton-pseudo.github.io/caroline-nfc/#admin
+      if (hash === "admin") {
+        document.getElementById("status-text").textContent = "Mode Ingénieur • Générateur AES";
+        document.getElementById("admin-view").classList.remove("hidden");
+        setupAdmin();
+        return;
+      }
 
-    const ctaBtn = document.getElementById("cta-btn");
-    if (WHATSAPP_NUMBER !== "") {
-      ctaBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msgBody}`;
-    } else {
-      ctaBtn.href = `mailto:${CONTACT_EMAIL}?subject=${msgSubject}&body=${msgBody}`;
+      const params = new URLSearchParams(hash);
+      const id = params.get("id");
+      const keyHex = params.get("k");
+      const inlinePayload = params.get("p"); // Permet de tester une puce immédiatement
+
+      const encryptedHex = inlinePayload || ENCRYPTED_DB[id];
+
+      if (!id || !keyHex || !encryptedHex || keyHex.length !== 32) {
+        showError();
+        return;
+      }
+
+      try {
+        const rawData = fromHex(encryptedHex);
+        const iv = rawData.slice(0, 12);
+        const ciphertext = rawData.slice(12);
+
+        const cryptoKey = await crypto.subtle.importKey(
+          "raw", fromHex(keyHex), { name: "AES-GCM" }, false, ["decrypt"]
+        );
+
+        const decryptedBuf = await crypto.subtle.decrypt(
+          { name: "AES-GCM", iv: iv }, cryptoKey, ciphertext
+        );
+
+        const art = JSON.parse(new TextDecoder().decode(decryptedBuf));
+        renderArtwork(id, keyHex, art);
+      } catch (e) {
+        // Si un seul caractère de la clé ou du texte chiffré est faux, AES-GCM bloque tout
+        showError();
+      }
     }
 
-    // Simulation de vérification matérielle (0.7 seconde)
-    setTimeout(() => {
+    function renderArtwork(id, keyHex, art) {
       const badge = document.getElementById("badge");
-      const statusText = document.getElementById("status-text");
       badge.classList.add("verified");
-      statusText.textContent = "Œuvre Authentifiée • Puce Vérifiée";
-    }, 700);
+      document.getElementById("status-text").textContent = "Signature AES Validée • Puce Authentique";
+
+      document.getElementById("art-title").textContent = art.title;
+      document.getElementById("art-id").textContent = id;
+      document.getElementById("art-col").textContent = art.col;
+      document.getElementById("art-tech").textContent = art.tech;
+      document.getElementById("art-ed").textContent = art.ed;
+      document.getElementById("art-hash").textContent = "0x" + keyHex.substring(0, 8).toUpperCase();
+      document.getElementById("art-story").textContent = art.story;
+
+      const subject = encodeURIComponent(`Commande sur-mesure (via châssis certifié ${id})`);
+      const body = encodeURIComponent(
+        `Bonjour Caroline,\n\nJ'ai scanné la plaque châssis NFC de votre œuvre "${art.title}" (Châssis ${id} - Signature 0x${keyHex.substring(0,8).toUpperCase()}).\n\nJe souhaiterais échanger avec vous pour la réalisation d'une œuvre sur-mesure.\n\nCordialement,`
+      );
+      document.getElementById("cta-btn").href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+      document.getElementById("client-view").classList.remove("hidden");
+    }
+
+    function showError() {
+      const badge = document.getElementById("badge");
+      badge.classList.add("error");
+      document.getElementById("status-text").textContent = "Échec Cryptographique • Puce Invalide";
+      document.getElementById("error-view").classList.remove("hidden");
+    }
+
+    function setupAdmin() {
+      document.getElementById("gen-btn").addEventListener("click", async () => {
+        const id = document.getElementById("in-id").value.trim();
+        const payloadObj = {
+          title: document.getElementById("in-title").value.trim(),
+          col: document.getElementById("in-col").value.trim(),
+          tech: document.getElementById("in-tech").value.trim(),
+          ed: document.getElementById("in-ed").value.trim(),
+          story: document.getElementById("in-story").value.trim()
+        };
+
+        const keyBytes = crypto.getRandomValues(new Uint8Array(16)); // 128 bits d'entropie
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        const cryptoKey = await crypto.subtle.importKey(
+          "raw", keyBytes, { name: "AES-GCM" }, false, ["encrypt"]
+        );
+
+        const encoded = new TextEncoder().encode(JSON.stringify(payloadObj));
+        const cipherBuf = await crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, cryptoKey, encoded);
+
+        const combined = new Uint8Array(iv.length + cipherBuf.byteLength);
+        combined.set(iv, 0);
+        combined.set(new Uint8Array(cipherBuf), iv.length);
+
+        const hexPayload = toHex(combined);
+        const hexKey = toHex(keyBytes);
+        const baseUrl = window.location.origin + window.location.pathname;
+
+        document.getElementById("out-db").textContent = `"${id}": "${hexPayload}",`;
+        document.getElementById("out-url").textContent = `${baseUrl}#id=${id}&k=${hexKey}`;
+        document.getElementById("admin-output").classList.remove("hidden");
+      });
+    }
+
+    init();
   </script>
 </body>
 </html>
